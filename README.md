@@ -25,10 +25,12 @@ allowed_remote_resources:
 
 Fullsend fetches the complete companion scripts directory, including the Python
 package and pinned dependencies. No authenticated GitHub checkout is required.
-Use Fullsend 0.37.0 or later and create a lock file before running:
+Use a current Fullsend version that composes resources relative to a registered
+remote harness. The GitLab test uses the consumer project’s existing source-built
+Fullsend installer. Create a lock file before running:
 
 ```sh
-fullsend lock scribe --forge gitlab --update
+fullsend lock scribe --forge gitlab --fullsend-dir .fullsend --update
 fullsend run scribe --forge gitlab --fullsend-dir .fullsend --target-repo . --output-dir output
 ```
 
