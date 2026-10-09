@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scribe4jira"
+version = "0.1.0"
+description = "AI-powered meeting notes to Jira sync"
+requires-python = ">=3.11"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "venv"]
+skips = ["B101"]  # assert_used - needed for tests
+
+[tool.bandit.assert_used]
+skips = ["*_test.py", "test_*.py"]
+
+[tool.mypy]
+warn_return_any = false
+python_version = "3.11"
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = ["E501"]  # line-too-long (handled by formatter)
+
+[tool.coverage.run]
+source = ["scribe4jira", ".fullsend/scripts/team_config.py"]
+omit = ["tests/*", ".venv/*", "venv/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.setuptools]
+package-dir = {"" = ".fullsend/scripts"}
+py-modules = ["team_config"]
+
+[tool.setuptools.packages.find]
+where = [".fullsend/scripts"]
+include = ["scribe4jira*"]
+
+[tool.setuptools.package-data]
+scribe4jira = ["data/*.json"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["scribe4jira", "team_config"]

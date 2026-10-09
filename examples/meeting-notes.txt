@@ -1,0 +1,10 @@
+Synthetic meeting notes for a Scribe integration test.
+
+The team agreed to create one new Task titled "Synthetic Scribe integration proof".
+The task is to document a reproducible checklist for testing a custom Scribe agent
+from a remote harness URL. Acceptance criteria: record the pinned source revision,
+confirm schema validation, and link the resulting test issue from the private CI
+run. This is a standalone test task, not a comment on an existing issue. No Epic,
+parent issue, or production deployment change is required. Priority should use the
+configured Jira project default. All details in these notes are synthetic and safe
+to publish. No existing backlog item covers this exact synthetic proof.

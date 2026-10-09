@@ -1,0 +1,33 @@
+agent: agents/scribe.md
+model: opus
+image: ghcr.io/fullsend-ai/fullsend-sandbox:0.32.0
+policy: policies/scribe.yaml
+role: scribe
+slug: scribe4jira
+host_files:
+  - src: env/gcp-vertex.env
+    dest: /sandbox/workspace/.env.d/gcp-vertex.env
+    expand: true
+  - src: ${GOOGLE_APPLICATION_CREDENTIALS}
+    dest: /tmp/.gcp-credentials.json
+  - src: ${GCP_OIDC_TOKEN_FILE}
+    dest: /sandbox/workspace/.gcp-oidc-token
+    optional: true
+  - src: env/scribe-agent.env
+    dest: /sandbox/workspace/.env.d/scribe-agent.env
+  - src: ${SCRIBE_WORKSPACE_DIR}/meeting-notes.json
+    dest: /tmp/workspace/meeting-notes.json
+  - src: ${SCRIBE_WORKSPACE_DIR}/backlog.json
+    dest: /tmp/workspace/backlog.json
+  - src: ${SCRIBE_WORKSPACE_DIR}/closed-issues.json
+    dest: /tmp/workspace/closed-issues.json
+pre_script: scripts/pre-scribe.sh
+validation_loop:
+  script: scripts/validate-output-schema.sh
+  schema: scripts/scribe4jira/data/scribe-result.schema.json
+  max_iterations: 2
+post_script: scripts/post-scribe.sh
+env:
+  runner:
+    FULLSEND_OUTPUT_FILE: agent-result.json
+timeout_minutes: 15

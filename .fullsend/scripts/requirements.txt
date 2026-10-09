@@ -1,0 +1,10 @@
+# Minimal requirements for fullsend sandbox
+# This is a stripped-down version of requirements.txt
+# Only includes packages needed by pre_scribe.py and post_scribe.py
+
+# Core dependencies (required)
+google-auth[requests]==2.59.1    # Google Drive API access (pre_scribe.py)
+requests==2.34.2                  # Jira REST API (pre_scribe.py, post_scribe.py)
+pyyaml==6.0.3                     # Config parsing (config.py)
+
+jsonschema==4.23.0

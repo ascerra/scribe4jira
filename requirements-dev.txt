@@ -1,0 +1,8 @@
+# Test dependencies
+jsonschema>=4.23.0
+pytest>=8.3.0
+pytest-cov>=6.0.0
+
+# Lint/type/security tools are pinned in .pre-commit-config.yaml and
+# provisioned by pre-commit hook environments. Run: pre-commit run --all-files
+pre-commit>=3.8.0
