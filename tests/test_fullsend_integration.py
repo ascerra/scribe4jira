@@ -3,7 +3,7 @@
 import pytest
 
 from scribe4jira.config import ScribeConfig
-from scribe4jira.fullsend import check_project_scope
+from scribe4jira.fullsend import check_issue_limit, check_project_scope
 
 
 @pytest.mark.parametrize("value", ["ture", "", "maybe"])
@@ -40,3 +40,17 @@ def test_configured_project_is_accepted():
         {"new_issues": [{"project_id": "TEST"}], "topics": [{"existing_issue_id": "TEST-1"}]},
         "TEST",
     )
+
+
+def test_issue_limit_blocks_multiple_writes(monkeypatch):
+    monkeypatch.setenv("SCRIBE_MAX_NEW_ISSUES", "1")
+    check_issue_limit({"new_issues": [{}]})
+    with pytest.raises(ValueError, match="exceed"):
+        check_issue_limit({"new_issues": [{}, {}]})
+
+
+@pytest.mark.parametrize("value", ["", "-1", "one"])
+def test_invalid_issue_limit_fails_closed(monkeypatch, value):
+    monkeypatch.setenv("SCRIBE_MAX_NEW_ISSUES", value)
+    with pytest.raises(ValueError, match="nonnegative integer"):
+        check_issue_limit({"new_issues": []})

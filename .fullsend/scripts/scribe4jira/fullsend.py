@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -24,6 +25,17 @@ def check_project_scope(result: dict, project: str) -> None:
         key = topic.get("existing_issue_id")
         if key and not key.startswith(project + "-"):
             raise ValueError("Comment targets a different Jira project")
+
+
+def check_issue_limit(result: dict) -> None:
+    """Apply an optional host-controlled limit before any Jira writes."""
+    value = os.environ.get("SCRIBE_MAX_NEW_ISSUES")
+    if value is None:
+        return
+    if not value.isdecimal():
+        raise ValueError("SCRIBE_MAX_NEW_ISSUES must be a nonnegative integer")
+    if len(result.get("new_issues", [])) > int(value):
+        raise ValueError("Proposed new issues exceed SCRIBE_MAX_NEW_ISSUES")
 
 
 def main() -> None:
@@ -59,6 +71,7 @@ def main() -> None:
         schema = json.loads((Path(__file__).parent / "data/scribe-result.schema.json").read_text())
         jsonschema.validate(result, schema)
         check_project_scope(result, config.jira_project_key)
+        check_issue_limit(result)
         shutil.copyfile(result_path, config.result_file)
         summary = run(config)
         if summary.rejected and not (summary.issues_created or summary.comments_posted):

@@ -44,6 +44,7 @@ environment values through private CI settings; do not commit real values:
 - `JIRA_DEFAULT_ISSUE_TYPE`, `JIRA_DEFAULT_PRIORITY`: valid target-project names
 - `SCRIBE_WORKSPACE_DIR`: a private temporary directory outside CI artifacts
 - `SCRIBE_DRY_RUN=true`: preview without writing; set `false` for an authorized run
+- `SCRIBE_MAX_NEW_ISSUES=1`: optional host-side cap for a controlled single-issue test
 - `SCRIBE_MODE=new_issues_only`: useful for an isolated new-issue proof
 - `SCRIBE_NOTES_SOURCE=file` and `SCRIBE_NOTES_FILE`: a local note file, or
   `SCRIBE_NOTES_SOURCE=drive` plus `SCRIBE_DRIVE_CREDENTIALS` and a search query
